@@ -3,6 +3,11 @@ SESSION_START();
 include('connect_data.php');
 
 if (isset($_SESSION['ID_connect_hackthon']) AND $_SESSION['ID_connect_hackthon']=='Rendez-vous-project9989' ) {
+
+    if ($_SESSION['auth']!='entrer') {
+    $reponse =  'Entrer le code d\'authentification.';
+    header("location:auth_d.php?aff_reponse_fausse=".$reponse);
+  }
   
 }
 else{

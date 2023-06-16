@@ -81,45 +81,14 @@ else{
     <section id="main-content">
       <section class="wrapper site-min-height">
 
-        <div class="row mt">         
-          <div class="col-lg-12">
-            <div class="row content-panel">
-              <div class="col-md-4 profile-text mt mb centered">
-                <div class="right-divider hidden-sm hidden-xs">
-                  <h4><?PHP echo$res_membre_existe['mail']; ?></h4>
-                  <h6>E-mail</h6>
-                  <h4><?PHP echo$res_membre_existe['tel']; ?></h4>
-                  <h6>Téléphone</h6>
-                  <h4><?PHP echo$res_membre_existe['adresse']; ?></h4>
-                  <h6>Adresse</h6>
-                </div>
-              </div>
-              <!-- /col-md-4 -->
-              <div class="col-md-4 profile-text">
-                <h3><?PHP echo$res_membre_existe['nom']; ?></h3>
-                <h6>Profession</h6>
-                <p>Vous trouvez ici des informations sur moi, vous pouvez egalement prendre rendez-vous dans mon espace via le button</p>
-                <br>
-              </div>
-              <!-- /col-md-4 -->
-              <div class="col-md-4 centered">
-                <div class="profile-pic">
-                  <p><img src="<?PHP echo$res_membre_existe['profile_picture']; ?>" class="img-circle"></p>
-                </div>
-              </div>
-              <!-- /col-md-4 -->
-            </div>
-            <!-- /row -->
-          </div>
-
           <div data-tab-content="2" style="margin: 20px; display: inline-block;">
-            <h3>Vos rendez-vous confirmé</h3>
+            <h3>Vos rendez-vous en attente</h3>
             <ul>
               <?php
 
                 INCLUDE 'calender/Calendar.php';
                 $calendar = new Calendar();
-                $calendar_confirm=$bdd->prepare('SELECT * FROM rdv WHERE user_receveur=? AND statu="confirme" ');
+                $calendar_confirm=$bdd->prepare('SELECT * FROM rdv WHERE user_receveur=? AND statu="attente" ');
                 $calendar_confirm->execute(array($_SESSION['id']));
                 while ($res_calendar_confirm=$calendar_confirm->fetch()) {
                   $titre=$res_calendar_confirm['titre'];

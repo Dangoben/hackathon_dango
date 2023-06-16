@@ -3,21 +3,29 @@ SESSION_START();
 include('connect_data.php');
 
 if (isset($_SESSION['ID_connect_hackthon']) AND $_SESSION['ID_connect_hackthon']=='Rendez-vous-project9989' ) {
-  
-    if (isset($_GET['profile'])) {
-        $profile=htmlspecialchars($_GET['profile']);
-        $membre_existe = $bdd->prepare('SELECT * FROM membre WHERE id = :id ');
-        $membre_existe->execute(array('id' => $profile));
-        $res_membre_existe = $membre_existe->fetch();
 
-        if (empty($res_membre_existe['id'])) {
-          $reponse =  'Utilisateur non existant';
-          header("location:panels.php?aff_reponse_fausse=".$reponse);
-        }
+    if ($_SESSION['auth']!='entrer') {
+      $reponse =  'Entrer le code d\'authentification.';
+      header("location:auth_d.php?aff_reponse_fausse=".$reponse);
     }
     else{
-      $reponse =  'Sélectionner un utilisateur';
-      header("location:panels.php?aff_reponse_fausse=".$reponse);
+
+      if (isset($_GET['profile'])) {
+          $profile=htmlspecialchars($_GET['profile']);
+          $membre_existe = $bdd->prepare('SELECT * FROM membre WHERE id = :id ');
+          $membre_existe->execute(array('id' => $profile));
+          $res_membre_existe = $membre_existe->fetch();
+
+          if (empty($res_membre_existe['id'])) {
+            $reponse =  'Utilisateur non existant';
+            header("location:panels.php?aff_reponse_fausse=".$reponse);
+          }
+      }
+      else{
+        $reponse =  'Sélectionner un utilisateur';
+        header("location:panels.php?aff_reponse_fausse=".$reponse);
+      }
+
     }
 
 }
@@ -177,6 +185,7 @@ else{
 
             <!-- Form de prise de rendez-vous -->
             <div id="popupForm" style="display: none;">
+              <a onclick="Edit()" style="float: right; margin: 10px 30px; padding: 5px 10px; border-radius: 2px; background-color: #fff; "> Quitter</a>
               <form id="myForm" action="S_ajout_rendez_vous.php" method="post" >
                 <input type="hidden" name="user_demandeur" value="<?PHP echo$_SESSION['id']; ?>" required>
                 <input type="hidden" name="user_receveur" value="<?PHP echo$res_membre_existe['id']; ?>" required>
@@ -209,6 +218,19 @@ else{
                 <button class="butt_sub" type="submit">Envoyer</button>
               </form>
             </div>
+            <script type="text/javascript">
+             /*------- Filtre avancer -----*/
+               function Edit() {
+
+                var x =document.getElementById("popupForm");
+
+                  if (x.style.display === "block") {
+                    x.style.display="none";
+                  } else {
+                    x.style.display="block";
+                  }
+               }
+            </script>
 
 
           </div>

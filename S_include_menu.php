@@ -18,6 +18,24 @@
               </a>
           </li>
           <li>
+            <a href="attente_rdv.php">
+              <i class="fa fa-map-marker"></i>
+              <span>Rendez-vous en attente</span>
+              </a>
+          </li>
+          <li>
+            <a href="edith_rdv.php">
+              <i class="fa fa-map-marker"></i>
+              <span>Modifier/Annuler un rendez-vous</span>
+              </a>
+          </li>
+          <li>
+            <a href="envoie_mail.php">
+              <i class="fa fa-map-marker"></i>
+              <span>Envoyez un mail</span>
+              </a>
+          </li>
+          <li>
             <a href="advanced_form_components.php">
               <i class="fa fa-map-marker"></i>
               <span> Paramètre </span>

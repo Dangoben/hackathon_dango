@@ -87,10 +87,10 @@ else{
                     <h6>DISPONIBILITE</h6>
                   </div>
                   <div class="profile-01 centered">
-                    <a href="profile.php?profile=<?php echo $res_all_membre['id']; ?>"><p>PRENDS UN RENDEZ-VOUS</p></a>
+                    <a ><p></p></a>
                   </div>
-                  <div class="centered">
-                    <h6><i class="fa fa-envelope"></i><br/><?php echo $res_all_membre['mail']; ?></h6>
+                  <div class="centered" style="background-color: #337ab7; padding: 5px;">
+                    <a href="mailto:<?php echo $res_all_membre['mail']; ?>" ><h6 style="font-size: 15px; color: #fff;"><i class="fa fa-envelope"></i><br/><?php echo $res_all_membre['mail']; ?></h6></a>
                   </div>
                 </div>
                 <!-- /content-panel -->

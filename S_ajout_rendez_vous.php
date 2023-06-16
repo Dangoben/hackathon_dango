@@ -1,7 +1,7 @@
 <?php
 SESSION_START();
 include('connect_data.php');
-// INCLUDE('Function_Mail.php');
+INCLUDE('Function_Mail.php');
 
 
 if (isset($_POST['datebegin']) && isset($_POST['date_end']) && isset($_POST['time_begin']) && isset($_POST['time_end']) && isset($_POST['titre']) && isset($_POST['note']) ) {
@@ -48,11 +48,11 @@ if (isset($_POST['datebegin']) && isset($_POST['date_end']) && isset($_POST['tim
        ));
 
 
-       // // Message a envoyé au client en cas de succes
-       // $Message_valider='Bonjour monsieur/madame vous avez recu une nouvelle demande de rendez-vous';
+       // Message a envoyé au client en cas de succes
+       $Message_valider='Bonjour monsieur/madame vous avez recu une nouvelle demande de rendez-vous';
          
-       // // Envoye de mail commande recus au client
-       // Mailer('dangoben601@gmail.com', $_POST['user_receveur_mail'], 'dangoben601@gmail.com', 'HACKATHON || NOTIFICATION', $Message_valider);
+       // Envoye de mail commande recus au client
+       Mailer('hackathon@prosac.ci', $_POST['user_receveur_mail'], 'dangoben601@gmail.com', 'HACKATHON || NOTIFICATION', $Message_valider);
 
      $reponse =  'VOTRE RENDEZ-VOUS A BIEN ETE PRIS MERCI!';
      header("location:profile.php?profile=".$user_receveur."&aff_reponse=".$reponse);

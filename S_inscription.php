@@ -3,7 +3,8 @@ SESSION_START();
 include('connect_data.php');
 include('S_compression_unit.php');
 $page= 'inscription.php';
-// include('Function_Mail.php');
+include('Function_Mail.php');
+
 $code = hash('sha256', (microtime()));
 
 function validatePassword($password) {
@@ -24,6 +25,8 @@ if (
     $adresse = strip_tags($_POST['adresse']);
     $mdp = strip_tags($_POST['mdp']);
     $rmdp = strip_tags($_POST['rmdp']);
+
+    $code_auth=rand(23409, 988777);
     if (isset($_FILES['profile']['name'])) {
       $image = $_FILES['profile']['name'];
     }
@@ -49,7 +52,7 @@ if (
             if (validatePassword($mdp)) {
                 $hashedPassword = password_hash($mdp, PASSWORD_DEFAULT); // Hashage du mot de passe
 
-                $reponse = $bdd->prepare('INSERT INTO membre (nom, tel, adresse, mail, password, profile_picture, codehash, date_create) VALUES (:nom, :tel, :adresse, :mail, :password, :profile_picture, :codehash, NOW())');
+                $reponse = $bdd->prepare('INSERT INTO membre (nom, tel, adresse, mail, password, profile_picture, auth, codehash, date_create) VALUES (:nom, :tel, :adresse, :mail, :password, :profile_picture, :auth, :codehash, NOW())');
                 $reponse->execute(array(
                     'nom' => $nom,
                     'tel' => $tel,
@@ -57,6 +60,7 @@ if (
                     'mail' => $email,
                     'password' => $hashedPassword,
                     'profile_picture' => $image,
+                    'auth' => $code_auth,
                     'codehash' => $code
                 ));
 
@@ -73,24 +77,18 @@ if (
                   INCLUDE('S_picture_upload.php');
                 }
 
-                // Message à envoyer au client en cas de succès
-                // $Message_valider = 'Bonjour Monsieur/Madame '.$nom.', bienvenue chez AB Guinée Store, votre plate-forme de vente en ligne en Guinée. Nous sommes heureux de vous compter parmi nous. Vos coordonnées de connexion sont les suivantes : Adresse Email : '.$email.' / Mot de passe : '.$mdp;
-
-                // Envoi de l'email de confirmation au client
-                // Mailer('assistance@ab-guineestore.com', $email, 'abguineestore859@gmail.com', 'COMPTE || AB-Guinée', $Message_valider);
-
                 $stmt = $bdd->prepare('SELECT * FROM membre WHERE mail = ? AND password = ?');
                 $stmt->execute(array($email, $hashedPassword));
                 $andré = $stmt->fetch();
                 
                 if (isset($andré['password']) && isset($andré['mail'])) {
-
                     $_SESSION['ID_connect_hackthon'] = 'Rendez-vous-project9989';
                     $_SESSION['id'] = $andré['id'];
                     $_SESSION['nom'] = $andré['nom'];
                     $_SESSION['adresse'] = $andré['adresse'];
                     $_SESSION['tel'] = $andré['tel'];
                     $_SESSION['mail'] = $andré['mail'];
+                    $_SESSION['auth'] = $code_auth;
                     $_SESSION['profile_picture'] = $andré['profile_picture'];
                     $_SESSION['password'] = $andré['password'];
 
@@ -100,6 +98,13 @@ if (
                     $reponse = 'INSCRIPTION RÉUSSIE, MERCI.';
                     header("location: index.php?aff_reponse=".$reponse);
                 }
+
+                // Message à envoyer au client en cas de succès
+                $Message_valider = 'Bonjour Monsieur/Madame '.$nom.', votre code de vérification est le: '.$code_auth;
+
+                // Envoi de l'email de confirmation au client
+                Mailer('hackathon@prosac.ci', $email, 'hackathon@prosac.ci', 'COMPTE || HACKATHON', $Message_valider);
+                
             } else {
                 $reponse = 'MOT DE PASSE TROP COURT, MINIMUM 8 CARACTÈRES.';
                 header("location: inscription.php?aff_reponse_fausse=".$reponse);
